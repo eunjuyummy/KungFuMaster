@@ -1,0 +1,33 @@
+이 코드는 강화학습 알고리즘인 A2C를 사용하여 Atari 게임인 KungFuMaster를 학습하고 실행하는 예시입니다. 코드의 각 부분을 하나씩 살펴보겠습니다:
+
+1. from stable_baselines3.common.env_util import make_atari_env: stable_baselines3 패키지에서 Atari 환경을 생성하기 위한 make_atari_env 함수를 import합니다.
+
+2. from stable_baselines3.common.vec_env import VecFrameStack: 여러 개의 환경을 스택으로 묶어서 처리하는 벡터 환경을 사용하기 위해 VecFrameStack 클래스를 import합니다.
+
+3. from stable_baselines3 import A2C: stable_baselines3 패키지의 A2C 알고리즘을 import합니다.
+
+4. env = make_atari_env('ALE/KungFuMaster-v5'): 'ALE/KungFuMaster-v5'라는 Atari 환경을 생성합니다. 이 환경은 Atari Learning Environment (ALE)에서 제공하는 KungFuMaster 게임입니다.
+
+5. env = VecFrameStack(env, n_stack=4): 생성한 환경을 4개의 연속된 프레임을 스택으로 묶어 처리하는 벡터 환경으로 변환합니다.
+
+6. model = A2C("CnnPolicy", env, verbose=1): A2C 알고리즘을 사용하여 "CnnPolicy"를 기반으로 모델을 초기화합니다. "CnnPolicy"는 합성곱 신경망을 사용하는 정책 신경망입니다. env는 학습에 사용할 환경입니다. verbose=1은 학습 과정에서 로그를 출력하도록 설정합니다.
+
+7. model.learn(total_timesteps=1000000000): 모델을 10억 스텝(시간 단위) 동안 학습시킵니다.
+
+8. model.save("KungFuMaster"): 학습된 모델을 "KungFuMaster"라는 이름으로 저장합니다.
+
+9. del model: 메모리에서 모델을 삭제합니다.
+
+10. model = A2C.load("KungFuMaster"): 저장된 모델을 로드합니다.
+
+11. obs = env.reset(): 환경을 초기화하고 초기 관찰(observation)을 얻습니다.
+
+12. while True:: 무한 루프를 시작합니다.
+
+13. action, _states = model.predict(obs): 현재 관찰을 기반으로 모델에서 행동(action)을 예측합니다.
+
+14. obs, reward, dones, info = env.step(action): 예측한 행동을 환경에 적용하여 다음 관찰, 보상(reward), 종료 여부(dones), 추가 정보(info)를 얻습니다.
+
+15. env.render(mode="human"): 환경을 시각화하여 게임을 실시간으로 보여줍니다. "human" 모드는 사람이 게임을 플레이하는 것처럼 보여주는 모드입니다.
+
+이 코드는 A2C 알고리즘을 사용하여 KungFuMaster 게임을 학습하고, 학습된 모델을 로드하여 게임을 실행하고 시각화하는 예시입니다.
